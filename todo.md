@@ -9,6 +9,7 @@
     4. Loss function: Cross Entropy Loss
     5. optimizer: Adam
     6. Epochs: 10
+    7. Batch size: 32
 4. to improve on the basic timeseries wave data, train a CNN on the data
     1. use extracted mel frequency features as the input to the CNN
     2. `CNN architecture`:
@@ -21,17 +22,23 @@
         4. Loss function: Cross Entropy Loss
         5. optimizer: Adam
         6. Epochs: dynamic depending on observed loss (3 epochs where loss <= 0.001)
+        7. Batch size: 32
 5. verify the usefulness of using a transfer learning approach instead of a train -> validate approach because:
     1. the dataset we have is much smaller (~40 samples/class vs ~800 samples/class)
     2. pre-trained architectures like ResNet34 can be more effective at audio classification through a transfer learning approach
-    3. `ResNet Architecture`:
+    3. `ResNet architecture`:
         1. model: torch.resnet34
         2. Layers: *pre-trained*
         3. Neuron structure: *pre-trained*
         4. Loss function: Cross Entropy Loss
         5. optimizer: Adam
         6. Epochs: 5
+        7. Batch size: 32
 6. now use the home audio dataset to run these established workflows, and report on results
 
 # Future work
 - VGGNet transfer learning model
+- Find:
+    - Precision
+    - Recall 
+    - F1 Score
