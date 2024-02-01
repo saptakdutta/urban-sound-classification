@@ -2,7 +2,8 @@
 1. read in a dataset with variation in classes
     1. we are going to use the urban sound classification dataset with 10 classes and ~8000 files evenly spread
 2. use basic feature extraction to create mel spectrograms
-3. try a basic `ANN architecture` to classify sounds from the wave file timeseries with the following layout:
+3. try a basic `ANN architecture` to classify sounds from the wave file timeseries with the following\
+   layout:
     1. model: torch.NeuralNet
     2. Layers: 3 + 1 output
     3. Neurons: L1=1024, L2=512, L3=128
@@ -21,7 +22,7 @@
             3. L3= Input shape (16, 30, 41) -> Output shape (64, 10, 15)
         4. Loss function: Cross Entropy Loss
         5. optimizer: Adam
-        6. Epochs: dynamic depending on observed loss (3 epochs where loss <= 0.001)
+        6. Epochs: 10, but dynamic depending on observed loss (3 epochs where loss <= 0.001)
         7. Batch size: 32
 5. verify the usefulness of using a transfer learning approach instead of a train -> validate approach because:
     1. the dataset we have is much smaller (~40 samples/class vs ~800 samples/class)
@@ -32,7 +33,7 @@
         3. Neuron structure: *pre-trained*
         4. Loss function: Cross Entropy Loss
         5. optimizer: Adam
-        6. Epochs: 5
+        6. Epochs: 5, but dynamic depending on observed loss (3 epochs where loss <= 0.001)
         7. Batch size: 32
 6. now use the home audio dataset to run these established workflows, and report on results
 
