@@ -1,70 +1,85 @@
 # Urban Sound Classification
 This dataset contains 8732 sound excerpts (<=4s) of urban sounds from 10 classes: air_conditioner, car_horn, children_playing, dog_bark, drilling, enginge_idling, gun_shot, jackhammer, siren, and street_music.
 
-This sound classification challenge contains 5435 training samples with labels and 3297 unlabelled test samples. This classification challenge is hosted on Analytics Vidhya which can be found [here](https://datahack.analyticsvidhya.com/contest/practice-problem-urban-sound-classification).
-
-## Understanding Audio Signals
-
-#### Amplitude and Frequency
- **Amplitude** is the size of vibration and it determines how loud a sound is.  **Frequency** is the speed of vibration and it describes the pitch of the sound. 
-
-#### Bit Rate and Sample Rate
-The audio quality can be measured using bit rate and sample rate. **Bit Rate** is measured in Kilo-bits-per-sec and it is the number of bit encoded in a second of audio. A lower bit-rate would mean lower sound quality and lower file size. **Sample Rate** is measured in Hertz and it defines how many times per second a sound is sampled. Sampling is the reduction of a continious time signal to a discrete time signal. A sampler extracts samples from a continious time signals. So if an audio has a sample rate of 44100 Hz, it means that each second is broken down into 44100 parts and values at those timestamps are stored.
-
-#### Fast Fourier Transform of audio signals
-The fast fourier transform algorithm computes the discrete fourier transform (DFT) of an audio signal. It basically converts the audio from time domain to frequency domain. A time-domain graph shows how a signal changes over time, whereas a frequency-domain graph shows how much of the signal lies within each given frequency band over a range of frequencies.
-
-![](https://upload.wikimedia.org/wikipedia/commons/7/72/Fourier_transform_time_and_frequency_domains_%28small%29.gif)
-
-#### Spectorgram
-A specrogram is a heatmap where the X-axis represents the time, Y-axis represents the frequency, with lower frequency at the bottom and the color determines the amplitude (how loud the sound is). So it basically shows how loud a particular frequency is at a particular time.
-
-![](https://upload.wikimedia.org/wikipedia/commons/c/c5/Spectrogram-19thC.png)
+# Getting started
+In order to set up this project you will need the repository, and a virtual environment that contains all the required software dependencies.
 
 
-## Modelling on audio data
-First, since the labels for test data weren't available, the training data was split into 80% training set and 20% validation set with equal proportions of data in each class. After splitting, the training set had 4350 samples and validation set had 1085 audio samples. 3 different models were trained on this dataset. Let's go through each of them.
-#### Artificial Neural Network on time-series data
-When we read the data using `librosa`, we get a time series data with the default sampling rate of 22050, which means for every second, we have 22050 data points available. For this dataset, the data was read with the default sampling rate and then each audio sample was made to be of a fixed length of 4 seconds by either adding padding or trimming from the end.
+## Installing GIT
+Start by installing `GIT` on your system, which will allow us to clone the repository:
+### Linux
+Using apt (debian based): 
+> sudo apt install git-all
 
-This means that we have 88200 data points for each sample. This data was used for training an Artificial neural network. Since the number of features is nearly 20 times the number of samples, the model was expected to perform poorly but it was interesting to know the drawbacks of directly training on the time series data. Once the model was trained, the predictions were submitted on [Analytics Vidhya](https://datahack.analyticsvidhya.com/contest/practice-problem-urban-sound-classification/#SolutionChecker) which gave us the accuracy score.
+Using dnf (RHEL based):
 
-Here are the results obtained:
-| ANN | Training Set | Validation Set | Test Set|
-|-----|--------------|---------------|-----------|
-| Accuracy | 96.67% | 19.26% | 17.44% |
-| Loss | 0.2134 | 7.4628 | Not Available |
+> sudo dnf install git-all
 
-#### Convolutional Neural Network on Spectrogram Images
-The time series data used for training the Artificial Neural Networkis not how humans perceive sound. So we first decompose the audio into different frequencies by using fourier transform and convert the frequency to mel scale which is how humans perceive sound. The amplitude is also converted to decibel which is also how humans perceive sound. Then, we get the spectrogram images of each audio whcih will be used to train our model. This conversion provides two benefits: it represents how humans perceive sound and it significantly reduces the dimension of the audio data.
+### MacOS
+Use the homebrew package manager
+> brew install git
 
-A convolutional neural network is built using PyTorch which is trained on the spectrogram images. Here are the results:
+### Windows
+> Follow [this tutorial](https://git-scm.com/download/win) to set it up locally
 
-| CNN | Training Set | Validation Set | Test Set|
-|-----|--------------|---------------|-----------|
-| Accuracy | 86.67% | 77.14% | 55.08% |
-| Loss | 0.5166 | 0.7329 | Not Available |
+Once git is installed, `cd` into the directory that you want this project to be located in and then clone this repository like so:
 
-#### Pre-trained ResNet Architecture on Spectrogram Images
-We can make slight modifications to a pre-trained model and get faster convergence, so a pre-trained resnet model was loaded using pytorch and the input and output layers were change according to our needs. The model was trained on the same spectrogram images used previously and here are the results:
+> git clone https://github.com/saptakdutta/audio_feature_extraction
 
-| ResNet | Training Set | Validation Set | Test Set|
-|-----|--------------|---------------|-----------|
-| Accuracy | 96.67% | 78.89% | 65.09% |
-| Loss | 0.0488 | 1.3268 | Not Available |
+You'll be prompted to enter in your gitlab username and password to clone the repo locally.
+Now go ahead to the next part to set up the virtual environment
+
+## Setting up the virtual environment
+### Recommended venv setup [`conda-lock.yml` method]
+The easiest and most consistent way to set up the project is through the provided `conda-lock` file. Install conda/miniconda using the [following instructions.](https://docs.conda.io/projects/miniconda/en/latest/miniconda-install.html)
+This method will set up an exact replica of the development virtual environment on the user's end regardless of operating system
+
+Ensure that your conda install is upto date using:
+
+> conda update conda
+
+Now install the conda-lock package to your `base environment` like so:
+
+> conda activate base
+
+> conda install --channel=conda-forge --name=base conda-lock
+
+Once conda lock has been installed,  use it to create the venv:
+
+> conda-lock install -n audio_feature_extraction conda-lock.yml
+
+This should create a virtual environment called `audio_feature_extraction` that will contain all the packages required to run this tool. The conda-lock package contains a concrete list of package versions (with checksums) to be installed. Unlike `conda env create`, the resulting environment will not change as new package versions become available, unless we explicitly update the lock file. This is a much more reliable way to create a virtual environment across multiple systems and platforms
+
+### Alternate venv setup [`environment.yml` method] (not recommended for most users)
+If you want to make changes to the repo itself and tinker around with the tool, using the environment file to create an up-to-date environment may be the better option.
+Ensure that your conda install is upto date using:
+
+> conda update conda
+
+Use your python package manager (conda/miniconda/mamba) to cd into the root directory and run the following command:
+
+> conda env create -f environment.yml
 
 
-# References
-[Audio Classification using Librosa and PyTorch](https://medium.com/@hasithsura/audio-classification-d37a82d6715)
+This should create a virtual environment called `audio_feature_extraction` that will contain all the packages required to run this tool. I cannot guarantee that the environment will be resolved without conflicts (especially between the pip and conda packages). Some packages such as gensim and numba have been observed to create problems in the past. There may be a bit of tinkering with packages and versioning in the YML file that needs to be done to set the venv up correctly.
 
-[Getting Started with Audio Data Analysis using Deep Learning](https://www.analyticsvidhya.com/blog/2017/08/audio-voice-processing-deep-learning/)
+# Directory Structure
+The local repo must have the following top level directrory layout: 
 
-[Practice Problem: Urban Sound Classification](https://datahack.analyticsvidhya.com/contest/practice-problem-urban-sound-classification/#About)
+    .
+    ├── /models
+    ├── /data                    
+    │   ├── /Test 
+    │   ├── /Train
+    │   ├── test.csv       
+    │   └── train.csv
+    ├── /predictions
+    ├── main.py
+    ├── Sound classification.ipynb
+    ├── utils.py
+    ├── environment.yml
+    ├── todo.md
+    ├── .gitignore        
+    └── README.md         
 
-[Amplitude and Frequency](https://www.howmusicworks.org/103/Sound-and-Music/Amplitude-and-Frequency)
-
-[Understanding Audio Quality: Bit Rate, Sample Rate](https://micropyramid.com/blog/understanding-audio-quality-bit-rate-sample-rate/)
-
-[What is a Spectrogram?](https://pnsn.org/spectrograms/what-is-a-spectrogram)
-
-[Fast Fourier Transform](https://en.wikipedia.org/wiki/Fast_Fourier_transform)
+Place the audio files to be analyzed into /audio_datasets/TargetEvent 
