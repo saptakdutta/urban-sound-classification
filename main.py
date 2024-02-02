@@ -1,13 +1,18 @@
 # %% Libs
 import IPython.display as ipd
-import librosa
 import librosa.display
-import utils
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+import torch.utils.data as data_utils
+from torchvision.models import resnet34
+
+import utils
 from lib.misc_fns import (
-    get_fixed_audio_len,
     get_melspectrogram_db,
     spec_to_image,
     train_val_split,
@@ -15,12 +20,7 @@ from lib.misc_fns import (
     evaluate,
     get_spec_loader,
 )
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-import torch.utils.data as data_utils
-from torchvision.models import resnet34
+
 # pycharm commit
 
 # %% Cuda Device info: check if acceleration is available
