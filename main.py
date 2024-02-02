@@ -10,6 +10,9 @@ import torch.nn.functional as F
 import torch.optim as optim
 import torch.utils.data as data_utils
 from torchvision.models import resnet34
+from torchvision.models import resnet50
+from torchvision.models import resnet101
+from torchvision.models import resnet152
 
 from lib import utils
 from lib.misc_fns import (
@@ -21,7 +24,6 @@ from lib.misc_fns import (
     get_spec_loader,
 )
 
-# pycharm commit
 
 # %% Cuda Device info: check if acceleration is available
 torch_mem_info = torch.cuda.mem_get_info()
@@ -44,6 +46,7 @@ if compute_dtype == torch.float16 and True:
     if major >= 8:
         print("=" * 80)
         print("Your GPU supports bfloat16: accelerate training with bf16=True")
+        fp16_support = True
         print("=" * 80)
 
 # %% Loading the train and test csv files
@@ -219,14 +222,26 @@ for epoch in range(EPOCHS):
         #! Send to the GPU if possible
         if device.type == "cuda":
             inputs, labels = inputs.to(device), labels.to(device)
-        # Running forward pass
-        outputs = net(inputs)
-        loss = loss_fn(outputs, labels)
-
-        # Backprop
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+        #! If CUDA is avaiable, use mixed precision for FP16 training using ⭐️ ⭐️ Autocasting
+        if (device.type == "cuda") & (fp16_support == True):
+            print("FP16 available and in use for mixed precision training")
+            with torch.cuda.amp.autocast():
+                # Running forward pass
+                outputs = net(inputs)
+                loss = loss_fn(outputs, labels)
+                # Backprop
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+        #! Otherwise fall back to FP32 training
+        else:
+            # Running forward pass
+            outputs = net(inputs)
+            loss = loss_fn(outputs, labels)
+            # Backprop
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
         # Measuring Accuracy
         total = labels.size(0)
@@ -387,14 +402,26 @@ for epoch in range(EPOCHS):
         if device.type == "cuda":
             data, labels = data.to(device), labels.to(device)
 
-        # Running forward pass
-        outputs = model(data)
-        loss = loss_fn(outputs, labels)
-
-        # Backprop
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+        #! If CUDA is avaiable, use mixed precision for FP16 training using ⭐️ ⭐️ Autocasting
+        if (device.type == "cuda") & (fp16_support == True):
+            print("FP16 available and in use for mixed precision training")
+            with torch.cuda.amp.autocast():
+                # Running forward pass
+                outputs = model(data)
+                loss = loss_fn(outputs, labels)
+                # Backprop
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+        #! Otherwise fall back to FP32 training
+        else:
+            # Running forward pass
+            outputs = model(data)
+            loss = loss_fn(outputs, labels)
+            # Backprop
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
         # Measuring accuracy
         total = labels.size(0)
@@ -519,14 +546,27 @@ for epoch in range(EPOCHS):
         if device.type == "cuda":
             print("sending to cuda")
             data, labels = data.to(device), labels.to(device)
-        # Running forward pass
-        outputs = resnet(data)
-        loss = loss_fn(outputs, labels)
 
-        # Backprop
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+        #! If CUDA is avaiable, use mixed precision for FP16 training using ⭐️ ⭐️ Autocasting
+        if (device.type == "cuda") & (fp16_support == True):
+            print("FP16 available and in use for mixed precision training")
+            with torch.cuda.amp.autocast():
+                # Running forward pass
+                outputs = resnet(data)
+                loss = loss_fn(outputs, labels)
+                # Backprop
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+        #! Otherwise fall back to FP32 training
+        else:
+            # Running forward pass
+            outputs = resnet(data)
+            loss = loss_fn(outputs, labels)
+            # Backprop
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
         # Measuring accuracy
         total = labels.size(0)
