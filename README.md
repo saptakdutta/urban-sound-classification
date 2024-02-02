@@ -57,12 +57,17 @@ This should create a virtual environment called `sound_classification` that will
 The local repo must have the following top level directrory layout: 
 
     .
-    ├── /models
+    ├── /.idea
     ├── /data                    
     │   ├── /Test 
     │   ├── /Train
     │   ├── test.csv       
     │   └── train.csv
+    ├── /lib
+    │   ├── /__pycache__
+    │   ├── __init__.py
+    │   └── misc_fns.py
+    ├── /models
     ├── /predictions
     ├── main.py
     ├── Sound classification.ipynb
