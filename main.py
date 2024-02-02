@@ -21,7 +21,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 import torch.utils.data as data_utils
 from torchvision.models import resnet34
-
+# pycharm commit
 
 # %% Cuda Device info: check if acceleration is available
 torch_mem_info = torch.cuda.mem_get_info()
