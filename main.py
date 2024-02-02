@@ -95,7 +95,7 @@ for i in range(5):
 plt.show()
 
 
-# %% Getting the spectrogram and the image of spectogram from time-series audio
+# %% Getting the spectrogram and the image of spectrogram from time-series audio
 random_class_spec = [get_melspectrogram_db(wav, sr=sr) for wav in random_class_data]
 random_class_spec_img = [spec_to_image(spec) for spec in random_class_spec]
 
@@ -194,7 +194,7 @@ class NeuralNet(nn.Module):
 # %% # Defining loss and optimizer
 net = NeuralNet()
 
-#! If GPU is avalable send model to it
+#! If GPU is available send model to it
 if device.type == "cuda":
     net.to(device)
     print("model sent to GPU")
@@ -354,7 +354,7 @@ class ConvNet(nn.Module):
 # %% Defining loss and optimizer
 model = ConvNet()
 
-#! If GPU is avalable send model to it
+#! If GPU is available send model to it
 if device.type == "cuda":
     model.to(device)
     print("model sent to GPU")
@@ -465,7 +465,7 @@ print("Validation loss: {:.4f}".format(round(val_loss, 4)))
 # Need to change the input and output layer
 resnet = resnet34(pretrained=True)
 
-#! If GPU is avalable send model to it
+#! If GPU is available send model to it
 if device.type == "cuda":
     resnet.to(device)
     print("model sent to GPU")
@@ -480,11 +480,11 @@ resnet.conv1 = nn.Conv2d(
     padding=(3, 3),
     bias=False,
 )
-#! If GPU is avalable send weights to it
+#! If GPU is available send weights to it
 if device.type == "cuda":
     resnet.conv1.to(device)
 resnet.fc = nn.Linear(in_features=512, out_features=NUM_CLASSES)
-#! If GPU is avalable send weights to it
+#! If GPU is available send weights to it
 if device.type == "cuda":
     resnet.fc.to(device)
 
