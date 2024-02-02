@@ -1,7 +1,7 @@
 import numpy as np
 import librosa
 import pandas as pd
-import utils
+import lib.utils as utils
 import torch
 import torch.nn as nn
 import torch.utils.data as data_utils

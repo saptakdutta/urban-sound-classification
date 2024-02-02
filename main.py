@@ -11,7 +11,7 @@ import torch.optim as optim
 import torch.utils.data as data_utils
 from torchvision.models import resnet34
 
-import utils
+from lib import utils
 from lib.misc_fns import (
     get_melspectrogram_db,
     spec_to_image,
