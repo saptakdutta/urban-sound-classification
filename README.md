@@ -24,7 +24,7 @@ Use the homebrew package manager
 
 Once git is installed, `cd` into the directory that you want this project to be located in and then clone this repository like so:
 
-> git clone https://github.com/saptakdutta/audio_feature_extraction
+> git clone https://github.com/saptakdutta/urban-sound-classification
 
 You'll be prompted to enter in your gitlab username and password to clone the repo locally.
 Now go ahead to the next part to set up the virtual environment
