@@ -186,7 +186,7 @@ def load_data(df, id_col, label_col=None, data_path="./", audio_len=4):
     return np.stack(audio_time_series, axis=0), np.array(sample_rates), np.array(labels)
 
 
-def evaluate(model, test_loader):
+def evaluate(model, test_loader, device):
     """
     Returns the accuracy and loss of a model
 
@@ -197,6 +197,13 @@ def evaluate(model, test_loader):
     test_loader: The test dataset in the form of torch DataLoader
     """
     model.eval()
+    #! If GPU is avalable send model to it
+    if device.type == "cuda":
+        model.to(device)
+        print("model sent to GPU")
+    else:
+        print("model sent to CPU")
+
     num_test_batches = len(test_loader)
     loss_fn = nn.CrossEntropyLoss()
     with torch.no_grad():
@@ -205,6 +212,9 @@ def evaluate(model, test_loader):
         total_loss = 0
         for i, batch in enumerate(test_loader):
             inputs, labels = batch
+            if device.type == "cuda":
+                #! Send the inputs to GPU
+                inputs, labels = inputs.to(device), labels.to(device)
             outputs = model(inputs)
             _, predicted = torch.max(outputs, dim=1)
             loss = loss_fn(outputs, labels)
