@@ -40,6 +40,16 @@ Use your python package manager (conda/miniconda/mamba) to cd into the root dire
 
 > conda env create -f environment.yml
 
+Now follow these steps to install pytorch and torchaudio in your virtual environment
+
+First activate the vvirtual environment like so:
+
+> conda activate sound_classification
+
+Then run the following command:
+
+> conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+
 
 This should create a virtual environment called `sound_classification` that will contain all the packages required to run this tool. I cannot guarantee that the environment will be resolved without conflicts (especially between the pip and conda packages). Some packages such as gensim and numba have been observed to create problems in the past. There may be a bit of tinkering with packages and versioning in the YML file that needs to be done to set the venv up correctly.
 
