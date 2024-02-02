@@ -66,12 +66,12 @@ The local repo must have the following top level directrory layout:
     ├── /lib
     │   ├── /__pycache__
     │   ├── __init__.py
-    │   └── misc_fns.py
+    │   ├── misc_fns.py
+    │   └── utils.py
     ├── /models
     ├── /predictions
     ├── main.py
     ├── Sound classification.ipynb
-    ├── utils.py
     ├── environment.yml
     ├── todo.md
     ├── .gitignore        
