@@ -48,6 +48,8 @@ if compute_dtype == torch.float16 and True:
         print("Your GPU supports bfloat16: accelerate training with bf16=True")
         fp16_support = True
         print("=" * 80)
+    else:
+        fp16_support = False
 
 # %% Loading the train and test csv files
 df = pd.read_csv("./data/train.csv")
