@@ -47,6 +47,11 @@ if compute_dtype == torch.float16 and True:
         print("=" * 80)
         print("Your GPU supports bfloat16: accelerate training with bf16=True")
         fp16_support = True
+        #! Enable tensor core operations for fp16 and TF32 matmul
+        # The flag below controls whether to allow TF32 on matmul. This flag defaults to False in PyTorch 1.12 and later.
+        torch.backends.cuda.matmul.allow_tf32 = True
+        # The flag below controls whether to allow TF32 on cuDNN. This flag defaults to True.
+        torch.backends.cudnn.allow_tf32 = True
         print("=" * 80)
     else:
         fp16_support = False
